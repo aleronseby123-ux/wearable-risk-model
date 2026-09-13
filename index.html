@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wearable Health Risk & Dynamic Underwriting Demo</title>
+  <style>
+    :root {
+      --bg: #090d13;
+      --card: #131922;
+      --card-alt: #1a222e;
+      --border: #293444;
+      --text: #c5d1de;
+      --heading: #f0f6fc;
+      --primary: #58a6ff;
+      --primary-glow: rgba(88, 166, 255, 0.15);
+      --success: #3fb950;
+      --warning: #d29922;
+      --danger: #f85149;
+      --purple: #bc8cff;
+      --muted: #7d8b99;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(88, 166, 255, 0.1);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      color: var(--primary);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    header h1 {
+      color: var(--heading);
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    header p {
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 15px;
+      max-width: 860px;
+    }
+
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #21262d;
+      border: 1px solid var(--border);
+      color: var(--heading);
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .github-link:hover {
+      background: #30363d;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Presets bar */
+    .presets-box {
+      margin-top: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .presets-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--heading);
+      margin-right: 6px;
+    }
+
+    .btn {
+      background: #212833;
+      border: 1px solid var(--border);
+      color: var(--heading);
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      background: #2d3748;
+      border-color: var(--muted);
+    }
+
+    .btn-active {
+      background: #1f6feb !important;
+      border-color: #58a6ff !important;
+      color: #fff !important;
+      box-shadow: 0 0 10px rgba(31, 111, 235, 0.4);
+    }
+
+    /* Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--heading);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 10px;
+    }
+
+    /* Form Controls */
+    .control-group {
+      margin-bottom: 15px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--heading);
+    }
+
+    .control-val {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #212833;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    }
+
+    select {
+      width: 100%;
+      padding: 8px 12px;
+      background: #212833;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--heading);
+      font-size: 13px;
+      outline: none;
+    }
+
+    /* Comparison row */
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 650px) {
+      .comparison-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .underwriting-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      position: relative;
+    }
+
+    .underwriting-box.static-box {
+      border-top: 4px solid var(--muted);
+    }
+
+    .underwriting-box.dynamic-box {
+      border-top: 4px solid var(--primary);
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+
+    .tag-static { background: #262c36; color: var(--muted); }
+    .tag-preferred { background: #238636; color: #fff; }
+    .tag-standard { background: #1f6feb; color: #fff; }
+    .tag-elevated { background: #9e6a03; color: #fff; }
+    .tag-high { background: #da3633; color: #fff; }
+
+    .price-lg {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--heading);
+      margin: 6px 0 2px 0;
+    }
+
+    .price-unit {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .price-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .metric-table {
+      width: 100%;
+      font-size: 13px;
+      border-collapse: collapse;
+    }
+
+    .metric-table td {
+      padding: 7px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .metric-table td:last-child {
+      text-align: right;
+      font-weight: 600;
+      color: var(--heading);
+    }
+
+    /* Callout Banner */
+    .spread-banner {
+      background: linear-gradient(90deg, rgba(88, 166, 255, 0.1) 0%, rgba(218, 54, 51, 0.1) 100%);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .spread-banner h3 {
+      font-size: 14px;
+      color: var(--heading);
+    }
+
+    .spread-banner p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .spread-amount {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    /* Risk meter */
+    .score-meter {
+      height: 12px;
+      border-radius: 6px;
+      background: linear-gradient(to right, #2ea043 0%, #2ea043 28%, #1f6feb 28%, #1f6feb 45%, #d29922 45%, #d29922 65%, #f85149 65%, #f85149 100%);
+      position: relative;
+      margin: 16px 0 10px 0;
+    }
+
+    .score-needle {
+      position: absolute;
+      top: -5px;
+      width: 6px;
+      height: 22px;
+      background: #ffffff;
+      border-radius: 3px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+      transform: translateX(-50%);
+      transition: left 0.25s ease;
+    }
+
+    .meter-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Waterfall breakdown */
+    .breakdown-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .breakdown-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #212833;
+      border-radius: 4px;
+      margin: 0 14px;
+      overflow: hidden;
+    }
+
+    .breakdown-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.25s ease;
+    }
+
+    /* 90-Day Roadmap */
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 680px) {
+      .timeline-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .timeline-card {
+      background: #171f2a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .timeline-card:hover {
+      border-color: var(--primary);
+    }
+
+    .timeline-card.active {
+      border-color: var(--primary);
+      background: #1d2736;
+      box-shadow: 0 0 12px rgba(88, 166, 255, 0.2);
+    }
+
+    .timeline-day { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .timeline-price { font-size: 16px; font-weight: 800; color: var(--heading); margin: 4px 0; }
+    .timeline-score { font-size: 12px; color: var(--primary); font-family: monospace; font-weight: 600; }
+
+    /* Recs box */
+    .recs-card {
+      background: #171f2a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 13px;
+    }
+
+    .recs-card ul {
+      margin-left: 20px;
+      margin-top: 8px;
+    }
+
+    .recs-card li {
+      margin-bottom: 6px;
+      color: #adbac7;
+    }
+
+    /* Dataset table */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 12px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .data-table th, .data-table td {
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .data-table th {
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    .data-table tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-top">
+        <div>
+          <div class="logo-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            Interactive Actuarial Telematics Demo
+          </div>
+          <h1>Continuous Wearable Health Risk & Underwriting Engine</h1>
+          <p>
+            Trained on Kaggle's <em>Sleep Health and Lifestyle Dataset</em> (374 subjects). Solving the 
+            <strong>Static Intake Form Paradox</strong> where two 30-year-olds with polar opposite daily habits pay identical premiums.
+          </p>
+        </div>
+        <div>
+          <a class="github-link" href="https://github.com/aleronseby123-ux/wearable-risk-model" target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            View GitHub Repository
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Presets -->
+      <div class="presets-box">
+        <span class="presets-label">Select Scenario:</span>
+        <button class="btn btn-active" onclick="applyPreset('personA')">Person A: Sedentary 30yo (4.5h Sleep, 2.8k Steps)</button>
+        <button class="btn" onclick="applyPreset('personB')">Person B: Active Runner 30yo (8.0h Sleep, 10.5k Steps)</button>
+        <button class="btn" onclick="applyPreset('average')">Average Profile (6.5h Sleep, 5.5k Steps)</button>
+        <button class="btn" onclick="applyPreset('nightShift')">Shift Worker with Sleep Fragmentation</button>
+      </div>
+    </header>
+
+    <!-- Underwriting Spread Highlight Banner -->
+    <div class="spread-banner">
+      <div>
+        <h3>Revealed Underwriting Gap Between Person A & Person B</h3>
+        <p>On paper they pay the exact same $100/mo, but continuous wearable biometrics reveal a true cost spread:</p>
+      </div>
+      <div class="spread-amount" id="banner-spread">$90.00 / mo ($1,080.00 / yr)</div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="grid">
+      <!-- Left: Interactive Sliders -->
+      <div class="card">
+        <div class="card-title">
+          <span>Wearable Telemetry Inputs</span>
+          <span style="font-size: 12px; color: var(--muted); font-weight: normal;">Live Adjust</span>
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Applicant Age</span>
+            <span class="control-val" id="val-age">30 yrs</span>
+          </div>
+          <input type="range" id="input-age" min="20" max="65" value="30" oninput="updateAll()" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Sleep Duration (Nightly)</span>
+            <span class="control-val" id="val-sleep">4.5 hrs</span>
+          </div>
+          <input type="range" id="input-sleep" min="3.5" max="10.0" step="0.1" value="4.5" oninput="updateAll()" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Quality of Sleep</span>
+            <span class="control-val" id="val-sleep-qual">3 / 10</span>
+          </div>
+          <input type="range" id="input-sleep-qual" min="1" max="10" value="3" oninput="updateAll()" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Daily Step Count</span>
+            <span class="control-val" id="val-steps">2,800 steps</span>
+          </div>
+          <input type="range" id="input-steps" min="1000" max="15000" step="100" value="2800" oninput="updateAll()" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Aerobic Physical Activity</span>
+            <span class="control-val" id="val-act">15 min</span>
+          </div>
+          <input type="range" id="input-act" min="0" max="120" step="5" value="15" oninput="updateAll()" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Resting Heart Rate</span>
+            <span class="control-val" id="val-hr">85 bpm</span>
+          </div>
+          <input type="range" id="input-hr" min="50" max="105" value="85" oninput="updateAll()" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Blood Pressure (Systolic)</span>
+            <span class="control-val" id="val-sys">138 mmHg</span>
+          </div>
+          <input type="range" id="input-sys" min="95" max="165" value="138" oninput="updateAll()" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Blood Pressure (Diastolic)</span>
+            <span class="control-val" id="val-dia">88 mmHg</span>
+          </div>
+          <input type="range" id="input-dia" min="60" max="110" value="88" oninput="updateAll()" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Chronic Stress Index</span>
+            <span class="control-val" id="val-stress">8 / 10</span>
+          </div>
+          <input type="range" id="input-stress" min="1" max="10" value="8" oninput="updateAll()" />
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>BMI Category Proxy</span>
+          </div>
+          <select id="input-bmi" onchange="updateAll()">
+            <option value="Normal">Normal Weight (BMI 18.5 - 24.9)</option>
+            <option value="Overweight" selected>Overweight (BMI 25.0 - 29.9)</option>
+            <option value="Obese">Obese (BMI ≥ 30.0)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Right: Model Outputs -->
+      <div>
+        <!-- Side by Side Pricing -->
+        <div class="comparison-row">
+          <!-- Static Box -->
+          <div class="underwriting-box static-box">
+            <span class="tag tag-static">Traditional Snapshot</span>
+            <h4 style="font-size: 14px; color: var(--heading);">Intake Questionnaire</h4>
+            <div class="price-lg">$100.00<span class="price-unit"> / mo</span></div>
+            <div class="price-sub">$1,200.00 / year • Blind Baseline</div>
+
+            <table class="metric-table">
+              <tr><td>Declared Age:</td><td id="static-age">30</td></tr>
+              <tr><td>Smoking Status:</td><td>Non-smoker (Checked)</td></tr>
+              <tr><td>Pre-existing History:</td><td>None (Checked)</td></tr>
+              <tr><td>Wearable Data:</td><td style="color: var(--danger);">0% (Ignored)</td></tr>
+              <tr><td>Assigned Risk Class:</td><td>Standard Baseline</td></tr>
+            </table>
+          </div>
+
+          <!-- Dynamic Box -->
+          <div class="underwriting-box dynamic-box">
+            <span class="tag" id="dynamic-tag">High Risk / Substandard</span>
+            <h4 style="font-size: 14px; color: var(--heading);">Wearable Risk Model</h4>
+            <div class="price-lg" id="dynamic-price">$165.00<span class="price-unit"> / mo</span></div>
+            <div class="price-sub" id="dynamic-sub">$1,980.00 / year • +65.0% risk loading</div>
+
+            <table class="metric-table">
+              <tr><td>Composite Health Score:</td><td id="table-score" style="color: var(--danger);">98.0 / 100</td></tr>
+              <tr><td>ML Clinical Event Prob:</td><td id="table-ml-prob">97.1%</td></tr>
+              <tr><td>Monthly Vitality Rebate:</td><td id="table-rebate" style="color: var(--success);">$0.00 / mo</td></tr>
+              <tr><td>Annual Subsidy Delta:</td><td id="table-spread" style="color: var(--danger);">+$780.00 / yr</td></tr>
+              <tr><td>Underwriting Verdict:</td><td id="table-tier">Substandard Tier</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Risk Score & Needle Gauge -->
+        <div class="card">
+          <div class="card-title">
+            <span>Composite Wearable Health Risk Score</span>
+            <span id="score-text" style="color: var(--danger); font-size: 20px; font-weight: 800;">98.0 / 100</span>
+          </div>
+
+          <div class="score-meter">
+            <div class="score-needle" id="score-needle" style="left: 98%;"></div>
+          </div>
+
+          <div class="meter-ticks">
+            <span>0 (Preferred Plus)</span>
+            <span>28 (Standard)</span>
+            <span>45 (Elevated)</span>
+            <span>65 (Substandard)</span>
+            <span>100</span>
+          </div>
+
+          <div style="margin-top: 22px;">
+            <h5 style="font-size: 13px; color: var(--heading); margin-bottom: 12px;">Additive Risk Points Breakdown:</h5>
+
+            <div class="breakdown-row">
+              <span style="width: 175px;">Sleep Deficit & Quality:</span>
+              <div class="breakdown-bar-bg"><div class="breakdown-bar-fill" id="bar-sleep" style="width: 80%; background: var(--purple);"></div></div>
+              <span style="width: 70px; text-align: right;" id="val-bar-sleep">+36.0 pts</span>
+            </div>
+
+            <div class="breakdown-row">
+              <span style="width: 175px;">Inactivity & Low Steps:</span>
+              <div class="breakdown-bar-bg"><div class="breakdown-bar-fill" id="bar-act" style="width: 70%; background: var(--danger);"></div></div>
+              <span style="width: 70px; text-align: right;" id="val-bar-act">+30.0 pts</span>
+            </div>
+
+            <div class="breakdown-row">
+              <span style="width: 175px;">Cardiovascular (HR & BP):</span>
+              <div class="breakdown-bar-bg"><div class="breakdown-bar-fill" id="bar-cardio" style="width: 65%; background: var(--warning);"></div></div>
+              <span style="width: 70px; text-align: right;" id="val-bar-cardio">+28.0 pts</span>
+            </div>
+
+            <div class="breakdown-row">
+              <span style="width: 175px;">Metabolic & Chronic Stress:</span>
+              <div class="breakdown-bar-bg"><div class="breakdown-bar-fill" id="bar-stress" style="width: 45%; background: var(--primary);"></div></div>
+              <span style="width: 70px; text-align: right;" id="val-bar-stress">+18.0 pts</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 90-Day Improvement Timeline -->
+        <div class="card">
+          <div class="card-title">
+            <span>Pay-As-You-Live 90-Day Coaching Trajectory</span>
+            <span style="font-size: 12px; color: var(--primary); font-weight: normal;">Interactive</span>
+          </div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">
+            Click each milestone below to see how Person A lowers their risk score and reduces their monthly insurance cost:
+          </p>
+
+          <div class="timeline-grid">
+            <div class="timeline-card active" id="node-0" onclick="applyMilestone(0)">
+              <div class="timeline-day">Day 1</div>
+              <div class="timeline-price">$165/mo</div>
+              <div class="timeline-score">Score: 98</div>
+            </div>
+            <div class="timeline-card" id="node-1" onclick="applyMilestone(1)">
+              <div class="timeline-day">Day 15</div>
+              <div class="timeline-price">$165/mo</div>
+              <div class="timeline-score">Score: 89</div>
+            </div>
+            <div class="timeline-card" id="node-2" onclick="applyMilestone(2)">
+              <div class="timeline-day">Day 30</div>
+              <div class="timeline-price">$165/mo</div>
+              <div class="timeline-score">Score: 71</div>
+            </div>
+            <div class="timeline-card" id="node-3" onclick="applyMilestone(3)">
+              <div class="timeline-day">Day 60</div>
+              <div class="timeline-price">$75/mo</div>
+              <div class="timeline-score">Score: 26</div>
+            </div>
+            <div class="timeline-card" id="node-4" onclick="applyMilestone(4)">
+              <div class="timeline-day">Day 90</div>
+              <div class="timeline-price">$75/mo</div>
+              <div class="timeline-score">Score: 15</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actionable Feedback -->
+        <div class="card">
+          <div class="card-title"><span>Dynamic Telematics Recommendations</span></div>
+          <div class="recs-card">
+            <ul id="recs-list">
+              <li>Critical sleep deprivation (&lt;5h/night): Major driver of cardiovascular strain.</li>
+              <li>Severely sedentary (&lt;3,500 steps/day): 2.4x higher all-cause mortality hazard.</li>
+              <li>Elevated resting heart rate (85 bpm): Tachycardia / autonomic strain.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dataset Explorer Sample -->
+        <div class="card">
+          <div class="card-title">
+            <span>Kaggle Dataset Ground Truth Sample (Ages 28–30)</span>
+            <span style="font-size: 11px; color: var(--muted); font-weight: normal;">374 total records</span>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Age</th>
+                  <th>Sleep (hrs)</th>
+                  <th>Steps</th>
+                  <th>Heart Rate</th>
+                  <th>Blood Pressure</th>
+                  <th>Disorder / Risk</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background: rgba(248, 81, 73, 0.1);">
+                  <td>28</td>
+                  <td>5.9 hrs</td>
+                  <td>3,000</td>
+                  <td>85 bpm</td>
+                  <td>140/90 mmHg</td>
+                  <td style="color: var(--danger); font-weight: 700;">Sleep Apnea (High Risk)</td>
+                </tr>
+                <tr style="background: rgba(248, 81, 73, 0.1);">
+                  <td>28</td>
+                  <td>5.9 hrs</td>
+                  <td>3,000</td>
+                  <td>85 bpm</td>
+                  <td>140/90 mmHg</td>
+                  <td style="color: var(--danger); font-weight: 700;">Insomnia (High Risk)</td>
+                </tr>
+                <tr style="background: rgba(63, 185, 80, 0.1);">
+                  <td>29</td>
+                  <td>7.8 hrs</td>
+                  <td>8,000</td>
+                  <td>70 bpm</td>
+                  <td>120/80 mmHg</td>
+                  <td style="color: var(--success); font-weight: 700;">None (Optimal)</td>
+                </tr>
+                <tr style="background: rgba(63, 185, 80, 0.1);">
+                  <td>30</td>
+                  <td>7.7 hrs</td>
+                  <td>8,000</td>
+                  <td>70 bpm</td>
+                  <td>120/80 mmHg</td>
+                  <td style="color: var(--success); font-weight: 700;">None (Optimal)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const presets = {
+      personA: { age: 30, sleep: 4.5, qual: 3, steps: 2800, act: 15, hr: 85, sys: 138, dia: 88, stress: 8, bmi: "Overweight" },
+      personB: { age: 30, sleep: 8.0, qual: 9, steps: 10500, act: 75, hr: 62, sys: 118, dia: 76, stress: 3, bmi: "Normal" },
+      average: { age: 35, sleep: 6.5, qual: 6, steps: 5500, act: 30, hr: 75, sys: 125, dia: 82, stress: 6, bmi: "Overweight" },
+      nightShift: { age: 32, sleep: 5.2, qual: 4, steps: 7200, act: 40, hr: 80, sys: 134, dia: 86, stress: 7, bmi: "Overweight" }
+    };
+
+    const milestones = [
+      { sleep: 4.5, qual: 3, steps: 2800, act: 15, hr: 85, sys: 138, dia: 88, stress: 8, bmi: "Overweight" },
+      { sleep: 5.2, qual: 5, steps: 4200, act: 25, hr: 83, sys: 135, dia: 86, stress: 7.5, bmi: "Overweight" },
+      { sleep: 6.1, qual: 6, steps: 6000, act: 35, hr: 79, sys: 130, dia: 84, stress: 6.5, bmi: "Overweight" },
+      { sleep: 7.1, qual: 7.5, steps: 8000, act: 45, hr: 74, sys: 125, dia: 81, stress: 5.0, bmi: "Normal" },
+      { sleep: 7.8, qual: 8.5, steps: 9800, act: 65, hr: 67, sys: 120, dia: 78, stress: 3.5, bmi: "Normal" }
+    ];
+
+    function applyPreset(name) {
+      document.querySelectorAll('.presets-box .btn').forEach(b => b.classList.remove('btn-active'));
+      event.target.classList.add('btn-active');
+      const p = presets[name];
+      document.getElementById('input-age').value = p.age;
+      document.getElementById('input-sleep').value = p.sleep;
+      document.getElementById('input-sleep-qual').value = p.qual;
+      document.getElementById('input-steps').value = p.steps;
+      document.getElementById('input-act').value = p.act;
+      document.getElementById('input-hr').value = p.hr;
+      document.getElementById('input-sys').value = p.sys;
+      document.getElementById('input-dia').value = p.dia;
+      document.getElementById('input-stress').value = p.stress;
+      document.getElementById('input-bmi').value = p.bmi;
+      updateAll();
+    }
+
+    function applyMilestone(idx) {
+      document.querySelectorAll('.timeline-card').forEach(n => n.classList.remove('active'));
+      document.getElementById(`node-${idx}`).classList.add('active');
+      const m = milestones[idx];
+      document.getElementById('input-sleep').value = m.sleep;
+      document.getElementById('input-sleep-qual').value = m.qual;
+      document.getElementById('input-steps').value = m.steps;
+      document.getElementById('input-act').value = m.act;
+      document.getElementById('input-hr').value = m.hr;
+      document.getElementById('input-sys').value = m.sys;
+      document.getElementById('input-dia').value = m.dia;
+      document.getElementById('input-stress').value = m.stress;
+      document.getElementById('input-bmi').value = m.bmi;
+      updateAll();
+    }
+
+    function calculateRisk(age, sleep, qual, steps, act, hr, sys, dia, stress, bmi) {
+      const baseAnchor = 15.0 + Math.max(0, (age - 25) * 0.6);
+
+      // Sleep
+      let sSleep = 0;
+      let recs = [];
+      if (sleep < 5.0) {
+        sSleep += 26;
+        recs.push("Critical sleep deprivation (<5h/night): Major driver of cardiovascular strain.");
+      } else if (sleep < 6.0) {
+        sSleep += 18;
+        recs.push("Sub-optimal sleep (<6h/night): Increases hypertension risk.");
+      } else if (sleep < 6.8) {
+        sSleep += 8;
+      } else if (sleep > 9.5) {
+        sSleep += 6;
+      }
+
+      if (qual <= 4) { sSleep += 10; recs.push("Poor sleep quality rating."); }
+      else if (qual <= 6) { sSleep += 5; }
+      else if (qual >= 8) { sSleep -= 3; }
+
+      // Activity
+      let sAct = 0;
+      if (steps < 3500) { sAct += 22; recs.push("Severely sedentary (<3,500 steps/day): High all-cause mortality hazard."); }
+      else if (steps < 5500) { sAct += 14; recs.push("Low step count (<5,500 steps/day): Target 8,000+ to lower premium."); }
+      else if (steps < 7500) { sAct += 6; }
+      else if (steps >= 10000) { sAct -= 8; }
+      else if (steps >= 8000) { sAct -= 4; }
+
+      if (act < 25) { sAct += 8; recs.push("Aerobic activity under 25 min/day."); }
+      else if (act >= 60) { sAct -= 4; }
+
+      // Cardio
+      let sCardio = 0;
+      if (hr >= 84) { sCardio += 16; recs.push(`Elevated resting HR (${hr} bpm): Tachycardia / autonomic strain.`); }
+      else if (hr >= 78) { sCardio += 9; recs.push(`Borderline elevated resting HR (${hr} bpm).`); }
+      else if (hr <= 65) { sCardio -= 4; }
+
+      if (sys >= 140 || dia >= 90) { sCardio += 20; recs.push(`Stage 2 Hypertension (${sys}/${dia} mmHg).`); }
+      else if (sys >= 130 || dia >= 80) { sCardio += 12; recs.push(`Stage 1 Hypertension (${sys}/${dia} mmHg).`); }
+      else if (sys >= 120 && dia < 80) { sCardio += 5; }
+      else { sCardio -= 2; }
+
+      // Stress & BMI
+      let sStress = 0;
+      if (bmi === "Obese") { sStress += 16; recs.push("Obesity: Elevates cardiovascular & apnea risk."); }
+      else if (bmi === "Overweight") { sStress += 8; }
+
+      if (stress >= 8) { sStress += 10; recs.push("High chronic stress (≥8/10): Stimulates cortisol surge."); }
+      else if (stress >= 6) { sStress += 5; }
+      else if (stress <= 3) { sStress -= 3; }
+
+      let score = baseAnchor + sSleep + sAct + sCardio + sStress;
+      score = Math.max(5.0, Math.min(98.0, score));
+
+      // Pricing & Tier
+      let tier = "Preferred Plus", mult = 0.75, rebate = 25, tagClass = "tag-preferred";
+      if (score >= 60.0) {
+        tier = "High Risk / Substandard"; mult = 1.65; rebate = 0; tagClass = "tag-high";
+      } else if (score >= 42.0) {
+        tier = "Elevated Risk"; mult = 1.25; rebate = 5; tagClass = "tag-elevated";
+      } else if (score >= 28.0) {
+        tier = "Standard Healthy"; mult = 0.90; rebate = 15; tagClass = "tag-standard";
+      }
+
+      // Proxy ML probability
+      const z = (score - 48) / 12.0;
+      const mlProb = 1 / (1 + Math.exp(-z));
+
+      if (recs.length === 0) recs.push("Optimal metrics maintained! Keep current activity to lock in Preferred Plus discounts.");
+
+      return {
+        score: score.toFixed(1),
+        tier: tier,
+        mult: mult,
+        tagClass: tagClass,
+        rebate: rebate,
+        dynamicPrice: (100.0 * mult).toFixed(2),
+        pctDelta: (((mult - 1.0) * 100).toFixed(1)),
+        mlProb: (mlProb * 100).toFixed(1),
+        sSleep: sSleep,
+        sAct: sAct,
+        sCardio: sCardio,
+        sStress: sStress,
+        recs: recs
+      };
+    }
+
+    function updateAll() {
+      const age = parseInt(document.getElementById('input-age').value);
+      const sleep = parseFloat(document.getElementById('input-sleep').value);
+      const qual = parseFloat(document.getElementById('input-sleep-qual').value);
+      const steps = parseInt(document.getElementById('input-steps').value);
+      const act = parseInt(document.getElementById('input-act').value);
+      const hr = parseInt(document.getElementById('input-hr').value);
+      const sys = parseInt(document.getElementById('input-sys').value);
+      const dia = parseInt(document.getElementById('input-dia').value);
+      const stress = parseFloat(document.getElementById('input-stress').value);
+      const bmi = document.getElementById('input-bmi').value;
+
+      // Labels
+      document.getElementById('val-age').innerText = `${age} yrs`;
+      document.getElementById('val-sleep').innerText = `${sleep.toFixed(1)} hrs`;
+      document.getElementById('val-sleep-qual').innerText = `${qual} / 10`;
+      document.getElementById('val-steps').innerText = `${steps.toLocaleString()} steps`;
+      document.getElementById('val-act').innerText = `${act} min`;
+      document.getElementById('val-hr').innerText = `${hr} bpm`;
+      document.getElementById('val-sys').innerText = `${sys} mmHg`;
+      document.getElementById('val-dia').innerText = `${dia} mmHg`;
+      document.getElementById('val-stress').innerText = `${stress} / 10`;
+      document.getElementById('static-age').innerText = `${age}`;
+
+      const res = calculateRisk(age, sleep, qual, steps, act, hr, sys, dia, stress, bmi);
+
+      // Score needle & text
+      document.getElementById('score-text').innerText = `${res.score} / 100`;
+      document.getElementById('score-needle').style.left = `${Math.min(98, Math.max(2, res.score))}%`;
+      document.getElementById('table-score').innerText = `${res.score} / 100`;
+      document.getElementById('table-ml-prob').innerText = `${res.mlProb}%`;
+      document.getElementById('table-rebate').innerText = `$${res.rebate.toFixed(2)} / mo`;
+      document.getElementById('table-tier').innerText = res.tier;
+
+      const dynamicTag = document.getElementById('dynamic-tag');
+      dynamicTag.className = `tag ${res.tagClass}`;
+      dynamicTag.innerText = res.tier;
+
+      document.getElementById('dynamic-price').innerHTML = `$${res.dynamicPrice}<span class="price-unit"> / mo</span>`;
+      const sign = res.pctDelta >= 0 ? '+' : '';
+      document.getElementById('dynamic-sub').innerText = `$${(res.dynamicPrice * 12).toFixed(2)} / year • ${sign}${res.pctDelta}% vs static`;
+
+      const spread = (res.dynamicPrice - 100.0) * 12;
+      const spreadSign = spread >= 0 ? '+$' : '-$';
+      document.getElementById('table-spread').innerText = `${spreadSign}${Math.abs(spread).toFixed(2)} / yr`;
+
+      // Update banner spread
+      const monthlyDiff = Math.abs(res.dynamicPrice - 75.0);
+      const annualDiff = monthlyDiff * 12;
+      document.getElementById('banner-spread').innerText = `$${monthlyDiff.toFixed(2)} / mo ($${annualDiff.toFixed(2)} / yr)`;
+
+      // Bars
+      document.getElementById('bar-sleep').style.width = `${Math.min(100, Math.max(5, res.sSleep * 2.5))}%`;
+      document.getElementById('val-bar-sleep').innerText = `${res.sSleep >= 0 ? '+' : ''}${res.sSleep.toFixed(1)} pts`;
+
+      document.getElementById('bar-act').style.width = `${Math.min(100, Math.max(5, res.sAct * 2.5))}%`;
+      document.getElementById('val-bar-act').innerText = `${res.sAct >= 0 ? '+' : ''}${res.sAct.toFixed(1)} pts`;
+
+      document.getElementById('bar-cardio').style.width = `${Math.min(100, Math.max(5, res.sCardio * 2.5))}%`;
+      document.getElementById('val-bar-cardio').innerText = `${res.sCardio >= 0 ? '+' : ''}${res.sCardio.toFixed(1)} pts`;
+
+      document.getElementById('bar-stress').style.width = `${Math.min(100, Math.max(5, res.sStress * 2.5))}%`;
+      document.getElementById('val-bar-stress').innerText = `${res.sStress >= 0 ? '+' : ''}${res.sStress.toFixed(1)} pts`;
+
+      // Recommendations
+      const listEl = document.getElementById('recs-list');
+      listEl.innerHTML = '';
+      res.recs.forEach(r => {
+        const li = document.createElement('li');
+        li.innerText = r;
+        listEl.appendChild(li);
+      });
+    }
+
+    updateAll();
+  </script>
+</body>
+</html>
