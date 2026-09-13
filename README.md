@@ -1,5 +1,7 @@
 # Wearable Health Risk Scoring & Dynamic Insurance Underwriting Engine
 
+> 🚀 **Live Interactive Web Demo**: **[https://aleronseby123-ux.github.io/wearable-risk-model/](https://aleronseby123-ux.github.io/wearable-risk-model/)**
+
 A proof-of-concept predictive risk-scoring and dynamic underwriting model demonstrating how ongoing wearable and biometric telematics solve the **"Static Intake Form Paradox"** in life and health insurance.
 
 ---
