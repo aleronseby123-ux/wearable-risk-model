@@ -1,5 +1,9 @@
 # Wearable Health Risk Scoring & Dynamic Insurance Underwriting Engine
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Dataset: Kaggle](https://img.shields.io/badge/Dataset-Kaggle-20BEFF.svg)](data/sleep_health_and_lifestyle_dataset.csv)
+
 A proof-of-concept predictive risk-scoring and dynamic underwriting model demonstrating how ongoing wearable and biometric telematics solve the **"Static Intake Form Paradox"** in life and health insurance.
 
 ---
@@ -114,5 +118,14 @@ wearable-risk-model/
 │   ├── model.py                               # Core scoring & ML classifier
 │   ├── simulate.py                            # CLI case study & validation runner
 │   └── dashboard.html                         # Interactive visual web dashboard
+├── LICENSE                                    # MIT License
 └── README.md                                  # Complete documentation
 ```
+
+---
+
+## 6. License & Data Citation
+
+- **Code License**: This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+- **Data Source**: Telemetry data sourced from Kaggle's public *Sleep Health and Lifestyle Dataset* (anonymized public health benchmark).
+
