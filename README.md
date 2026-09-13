@@ -1,8 +1,10 @@
 # Wearable Health Risk Scoring & Dynamic Insurance Underwriting Engine
 
+[![CI](https://github.com/aleronseby123-ux/wearable-risk-model/actions/workflows/ci.yml/badge.svg)](https://github.com/aleronseby123-ux/wearable-risk-model/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Dataset: Kaggle](https://img.shields.io/badge/Dataset-Kaggle-20BEFF.svg)](data/sleep_health_and_lifestyle_dataset.csv)
+
 
 A proof-of-concept predictive risk-scoring and dynamic underwriting model demonstrating how ongoing wearable and biometric telematics solve the **"Static Intake Form Paradox"** in life and health insurance.
 
@@ -94,7 +96,22 @@ This executes:
 2. The side-by-side comparison of the Two 30-Year-Olds.
 3. A 90-day longitudinal coaching trajectory showing Person A cutting their premium from \$165/mo to \$75/mo.
 
-### 2. Launch the Interactive Web Dashboard
+### 2. Run the Interactive Personalized Risk Scorer
+Score any individual or input your own wearable metrics:
+```bash
+# Interactive guided prompt
+python3 src/cli.py
+
+# Or pass custom metrics directly via flags
+python3 src/cli.py --age 30 --sleep 8.0 --steps 10000 --hr 62 --bp 118/76
+```
+
+### 3. Run the Automated Unit Test Suite
+```bash
+python3 -m unittest discover tests
+```
+
+### 4. Launch the Interactive Web Dashboard
 Open `src/dashboard.html` in your web browser:
 ```bash
 # On macOS:
@@ -112,12 +129,19 @@ Features:
 
 ```
 wearable-risk-model/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                             # Automated testing on multi-Python matrix
 ├── data/
 │   └── sleep_health_and_lifestyle_dataset.csv  # 374 Kaggle telemetry records
 ├── src/
-│   ├── model.py                               # Core scoring & ML classifier
+│   ├── model.py                               # Core scoring engine & logistic classifier
 │   ├── simulate.py                            # CLI case study & validation runner
+│   ├── cli.py                                 # Interactive personalized CLI risk scorer
 │   └── dashboard.html                         # Interactive visual web dashboard
+├── tests/
+│   └── test_model.py                          # Automated unit test suite
+├── CONTRIBUTING.md                            # Contribution guidelines
 ├── LICENSE                                    # MIT License
 └── README.md                                  # Complete documentation
 ```
